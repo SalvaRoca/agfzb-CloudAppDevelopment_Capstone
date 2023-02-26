@@ -85,9 +85,9 @@ def get_dealer_reviews_from_cf(url, **kwargs):
     return results
 
 
-def analyze_review_sentiments(text):
-    url = config('https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/94cc1476-9bbf-49f3-95fc-124de6cd3072')
-    api_key = config('0odmxMyFdLdpwNzCDMVUvqA6nOCkyDHPGQw5mROu2tDm')
+def analyze_review_sentiments(review):
+    url = 'https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/94cc1476-9bbf-49f3-95fc-124de6cd3072'
+    api_key = '0odmxMyFdLdpwNzCDMVUvqA6nOCkyDHPGQw5mROu2tDm'
 
     version = '2021-08-01'
     authenticator = IAMAuthenticator(api_key)
@@ -96,16 +96,16 @@ def analyze_review_sentiments(text):
     nlu.set_service_url(url)
 
     try:
-        response = nlu.analyze(text=review_text, features=Features(
+        response = nlu.analyze(text=review, features=Features(
             sentiment=SentimentOptions())).get_result()
         print(json.dumps(response))
-        # sentiment_score = str(response["sentiment"]["document"]["score"])
+        sentiment_score = str(response["sentiment"]["document"]["score"])
+        print(sentiment_score)
         sentiment_label = response["sentiment"]["document"]["label"]
     except:
         print("Review is too short for sentiment analysis. Assigning default sentiment value 'neutral' instead")
         sentiment_label = "neutral"
 
-    # print(sentiment_score)
     print(sentiment_label)
 
     return sentiment_label
