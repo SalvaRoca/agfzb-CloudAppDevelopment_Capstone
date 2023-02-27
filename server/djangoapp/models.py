@@ -62,17 +62,17 @@ class CarDealer:
 
 class DealerReview:
 
-    def __init__(self, car_make, car_model, car_year, dealership, id, name, purchase, purchase_date, review):
+    def __init__(self, dealership, id, name, purchase, review, car_make=None, car_model=None, car_year=None, purchase_date=None, sentiment="neutral"):
         self.car_make = car_make
         self.car_model = car_model
         self.car_year = car_year
         self.dealership = dealership
-        self.id = id
-        self.name = name
-        self.purchase = purchase
+        self.id = id  # The id of the review
+        self.name = name  # Name of the reviewer
+        self.purchase = purchase  # Did the reviewer purchase the car? bool
         self.purchase_date = purchase_date
-        self.review = review
-        #self.sentiment = sentiment
+        self.review = review  # The actual review text
+        self.sentiment = sentiment  # Watson NLU sentiment analysis of review
 
     def __str__(self):
         return "Review: " + self.review
