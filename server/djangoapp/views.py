@@ -90,16 +90,22 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         context = {}
-        review_url = (f"https://eu-gb.functions.appdomain.cloud/api/v1/web/e6ac8900-a501-4f15-9139-2d3ab04b9289/dealership-package/review.json?dealerId={dealer_id}")
-        dealer_url = (f"https://eu-gb.functions.appdomain.cloud/api/v1/web/e6ac8900-a501-4f15-9139-2d3ab04b9289/dealership-package/dealership.json?dealerId={dealer_id}")
-        reviews = get_dealer_reviews_from_cf(review_url)
-        dealer = get_dealer_by_id(dealer_url, dealer_id)
-        dealer_name = dealer["full_name"]
-        context = {
-            "reviews":  reviews, 
-            "dealer_name": dealer_name
-        }
-        # Return a list of dealer short name
+        dealer_url = ("https://eu-gb.functions.appdomain.cloud/api/v1/web/e6ac8900-a501-4f15-9139-2d3ab04b9289/dealership-package/dealership.json")
+        dealer_obj = get_dealer_by_id(dealer_url, dealer_id)
+        if dealer_obj:
+            review_url = ("https://eu-gb.functions.appdomain.cloud/api/v1/web/e6ac8900-a501-4f15-9139-2d3ab04b9289/dealership-package/review.json")
+            reviews = get_dealer_reviews_from_cf(review_url, dealer_id)
+            if reviews:
+                dealer_name = dealer_obj.full_name
+                context = {
+                    "reviews":  reviews, 
+                    "dealer_name": dealer_name
+                }
+            else: 
+                dealer_name = dealer_obj.full_name
+                context = {
+                    "dealer_name": dealer_name
+                }
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
