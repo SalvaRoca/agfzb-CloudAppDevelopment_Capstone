@@ -40,7 +40,6 @@ def post_request(url, json_payload, **kwargs):
     except:
         print("An error occurred while making POST request. ")
     status_code = response.status_code
-    print(f"With status {status_code}")
 
     return response
 
