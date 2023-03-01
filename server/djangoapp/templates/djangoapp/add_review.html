@@ -71,19 +71,20 @@
                 </div>
                 <div class="form-group form-check">
                     <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
-                    <label for="purchasecheck">Did you purchase the car? </label>
+                    <label for="purchasecheck">Did you purchase the car from {{dealer_name}}? <i>(select purchased car information below if checked)</i></label>
                 </div>
                 <div class="form-group">
                     <label for="car">Select your car:</label>
-                    <select name="car" id="car" class="form-select">
+                    <select name="car" id="car" class="form-select" value="">
+                        <option selected value="{{car.id}}"></option>
                         {% for car in cars %}
-                            <option selected value={{car.id}}>{{car.model}} {{car.name}}, {{ car.year }}</option>
+                            <option value={{car.id}}>{{car.model}} {{car.name}}, {{ car.year }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="form-group" data-provide="datepicker">
-                    <label for="purchasedate">Select your purchase date (dd/mm/yyyy):</label>
-                    <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
+                    <label for="purchasedate">Select your purchase date:</label>
+                    <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate" placeholder="dd/mm/yyyy">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>

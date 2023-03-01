@@ -130,28 +130,27 @@ def add_review(request, dealer_id):
             review["name"] = f"{request.user.first_name} {request.user.last_name}"
             review["dealership"] = dealer_id
             review["review"] = form["content"]
-            review["purchase"] = form.get("purchasecheck")
+            if form.get("purchasecheck") == "on":
+                review["purchase"] = True
+            else:
+                review["purchase"] = False
+
             if review["purchase"]:
                 review["purchase_date"] = datetime.strptime(form.get("purchasedate"), "%d/%m/%Y").isoformat()
                 car = CarModel.objects.get(pk=form["car"])
-                review["car_make"] = car.model
+                review["car_make"] = car.model.name
                 review["car_model"] = car.name
                 review["car_year"] = car.year
-            
-            # If the user bought the car, get the purchase date
-            if form.get("purchasecheck"):
-                review["purchase_date"] = datetime.strptime(form.get("purchasedate"), "%d/%m/%Y").isoformat()
-            else: 
-                review["purchase_date"] = None
-
+            print (review)
             url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/e6ac8900-a501-4f15-9139-2d3ab04b9289/dealership-package/post-review.json"
             json_payload = {"review": review}
 
             # Performing a POST request with the review
             result = post_request(url, json_payload, dealerId=dealer_id)
-            if int(result.status_code) == 200:
+            if result:
                 print("Review posted successfully.")
-
+            else:
+                print("An error occurred while posting the review, please try again.")
             return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
         else:
             return redirect("/djangoapp/login/")

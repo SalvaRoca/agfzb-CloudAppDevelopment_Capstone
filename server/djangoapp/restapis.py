@@ -34,15 +34,13 @@ def get_request(url, api_key=False, **kwargs):
 
 
 def post_request(url, json_payload, **kwargs):
-    print(f"POST to {url}")
     try:
         response = requests.post(url, params=kwargs, json=json_payload)
     except:
-        print("An error occurred while making POST request. ")
-    status_code = response.status_code
-
+        response = None
     return response
 
+    
 
 def get_dealers_from_cf(url, **kwargs):
     results = []
@@ -93,10 +91,10 @@ def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
             # Create a DealerReview object with values in `doc` object
             if review["purchase"]:
                 review_obj = DealerReview(car_make=review["car_make"], car_model=review["car_model"], car_year=review["car_year"],
-                                          dealership=review["dealership"], id=review["id"], name=review["name"],
+                                          dealership=review["dealership"], id=review["_id"], name=review["name"],
                                           purchase=review["purchase"], purchase_date=review["purchase_date"], review=review["review"])
             else:
-                review_obj = DealerReview(dealership=review["dealership"], id=review["id"], name=review["name"],
+                review_obj = DealerReview(dealership=review["dealership"], id=review["_id"], name=review["name"],
                                           purchase=review["purchase"], review=review["review"])
             review_obj.sentiment = analyze_review_sentiments(review_obj.review)
             results.append(review_obj)
